@@ -41,6 +41,11 @@
       deletePerson: function(id){
         var i = indexOf(id);
         people.splice(i,1);
+      },
+
+      addPerson : function(person){
+        person.id = people.length + 1 + '';
+        people.push(person);
       } 
 
     };

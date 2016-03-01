@@ -4,8 +4,6 @@
 
 
   app.config(function($stateProvider, $urlRouterProvider){
-    
-    $urlRouterProvider.otherwise('/queue');
 
     $stateProvider
     .state('queue',{
@@ -14,8 +12,16 @@
     })
     .state('edit',{
       url: '/edit/:personId',
+      controller : 'EditController',
+      templateUrl: 'templates/edit.html'
+    })
+    .state('add',{
+      url: '/add',
+      controller : 'AddController',
       templateUrl: 'templates/edit.html'
     });
+
+    $urlRouterProvider.otherwise('/queue');
 
   });
 
@@ -32,8 +38,13 @@
   });
 
 
-  app.controller('QueueController', function($scope, queueService){
+  app.controller('QueueController', function($scope, $state, queueService){
     $scope.queue = queueService.getPeople();
+
+    $scope.add = function(){
+      $state.go('add');
+    };
+
   });
 
 
@@ -53,4 +64,19 @@
     }
   });
 
+  app.controller('AddController', function($scope, $state, queueService){
+    $scope.person = {
+      name: '',
+      status: 'waiting in queue'
+    };
+
+    $scope.save = function(){
+      queueService.addPerson($scope.person);
+      $state.go('queue');
+    };
+  });
+
 })();
+
+
+
