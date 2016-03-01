@@ -1,6 +1,6 @@
 (function(){
 
-  var app = angular.module('queup', ['ionic', 'angularMoment']);
+  var app = angular.module('queup', ['ionic', 'angularMoment', 'firebase']);
 
 
   app.config(function($stateProvider, $urlRouterProvider){
@@ -8,6 +8,7 @@
     $stateProvider
     .state('queue',{
       url: '/queue',
+      controller: 'QueueController',
       templateUrl: 'templates/queue.html'
     })
     .state('edit',{
@@ -38,44 +39,78 @@
   });
 
 
-  app.controller('QueueController', function($scope, $state, queueService){
-    $scope.queue = queueService.getPeople();
+  app.controller('QueueController', function($scope, $state, Queue){
+    
+     $scope.queue = Queue;
+    //$scope.queue = Queue.getPeople();
+
+    // $scope.queue.$loaded(function(){
+
+    //   if($scope.queue.length === 0){
+    //     $scope.queue.$add({
+    //       name: 'Tittaya Mairittha',
+    //       status: 'Added to queue',
+    //       updateTime: Firebase.ServerValue.TIMESTAMP
+    //     });
+    //     $scope.queue.$add({
+    //       name: 'Nattaya Mairittha',
+    //       status: 'Added to queue',
+    //       updateTime: Firebase.ServerValue.TIMESTAMP
+    //     });
+    //   }
+
+    // });
 
     $scope.add = function(){
       $state.go('add');
     };
 
-    $scope.delete = function(personId){
-      queueService.deletePerson(personId);
+    $scope.delete = function(person){
+      // Queue.deletePerson(personId);
+      Queue.$remove(person);
     };
 
   });
 
 
-  app.controller('EditController', function($scope, $state, queueService){
+  app.controller('EditController', function($scope, $state, Queue){
+    var person = Queue.$getRecord($state.params.personId);
+    $scope.person = angular.copy(person);
     
-    // $scope.person = queueService.getPerson($state.params.personId); 
-    $scope.person = angular.copy(queueService.getPerson($state.params.personId)); 
+    // $scope.person = Queue.getPerson($state.params.personId); 
+    //$scope.person = angular.copy(Queue.getPerson($state.params.personId)); 
+
+    // $scope.save = function(){
+    //   Queue.updatePerson($scope.person);
+    //   $state.go('queue');
+    // };
 
     $scope.save = function(){
-      queueService.updatePerson($scope.person);
+      person.name =  $scope.person.name;
+      person.status = $scope.person.status;
+      person.updateTime = Firebase.ServerValue.TIMESTAMP;
+      Queue.$save(person);
       $state.go('queue');
     };
     
     $scope.delete = function(){
-      queueService.deletePerson($scope.person.id);
+      Queue.$remove(person);
+      // Queue.deletePerson($scope.person.id);
       $state.go('queue');
     }
   });
 
-  app.controller('AddController', function($scope, $state, queueService){
+  app.controller('AddController', function($scope, $state, Queue){
     $scope.person = {
       name: '',
       status: 'waiting in queue'
     };
 
     $scope.save = function(){
-      queueService.addPerson($scope.person);
+      // Queue.addPerson($scope.person);
+      // $state.go('queue');
+      $scope.person.updateTime = Firebase.ServerValue.TIMESTAMP;
+      Queue.$add($scope.person);
       $state.go('queue');
     };
   });
