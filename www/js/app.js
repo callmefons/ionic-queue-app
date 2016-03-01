@@ -1,6 +1,6 @@
 (function(){
 
-  var app = angular.module('queup', ['ionic']);
+  var app = angular.module('queup', ['ionic', 'angularMoment']);
 
 
   app.config(function($stateProvider, $urlRouterProvider){

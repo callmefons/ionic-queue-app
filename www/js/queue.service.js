@@ -6,12 +6,14 @@
       {
         id:'1',
         name: 'Tittaya',
-        status: 'waiting queue'
+        status: 'waiting queue',
+        updateTime: moment().subtract(10,'minutes')
       },
       {
         id:'2',
         name: 'Nattaya',
-        status: 'waiting queue'
+        status: 'waiting queue',
+        updateTime: moment().subtract(5,'minutes')
       }
     ];
 
@@ -35,6 +37,7 @@
       },
 
       updatePerson: function(person){
+        person.updateTime = moment();
         people[indexOf(person.id)] = person;
       },
 
@@ -44,6 +47,7 @@
       },
 
       addPerson : function(person){
+        person.updateTime = moment();
         person.id = people.length + 1 + '';
         people.push(person);
       } 
