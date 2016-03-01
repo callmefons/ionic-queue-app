@@ -7,12 +7,13 @@
     
     $urlRouterProvider.otherwise('/queue');
 
-    $stateProvider.state('queue',{
+    $stateProvider
+    .state('queue',{
       url: '/queue',
       templateUrl: 'templates/queue.html'
     })
     .state('edit',{
-      url: '/edit',
+      url: '/edit/:personId',
       templateUrl: 'templates/edit.html'
     });
 
@@ -31,19 +32,25 @@
   });
 
 
-  app.controller('QueueController', function($scope){
-    
-    $scope.queue = [
-      {
-        name: 'Tittaya Mairittha',
-        status: 'Waiting in queue'
-      },
-      {
-        name: 'Nattaya Mairittha',
-        status: 'Waiting in queue'
-      }
-    ];
+  app.controller('QueueController', function($scope, queueService){
+    $scope.queue = queueService.getPeople();
+  });
 
+
+  app.controller('EditController', function($scope, $state, queueService){
+    
+    // $scope.person = queueService.getPerson($state.params.personId); 
+    $scope.person = angular.copy(queueService.getPerson($state.params.personId)); 
+
+    $scope.save = function(){
+      queueService.updatePerson($scope.person);
+      $state.go('queue');
+    };
+    
+    $scope.delete = function(){
+      queueService.deletePerson($scope.person.id);
+      $state.go('queue');
+    }
   });
 
 })();

@@ -2,7 +2,7 @@
 
 	<ion-content ng-controller="QueueController">
 		<ion-list>
-			<ion-item href="#/edit" ng-repeat="person in queue" 
+			<ion-item href="#/edit/{{person.id}}" ng-repeat="person in queue" 
 			class="item item-icon-right">
 				<h2>{{person.name}}</h2>
 				<p>{{person.status}}</p>
