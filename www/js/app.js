@@ -45,6 +45,10 @@
       $state.go('add');
     };
 
+    $scope.delete = function(personId){
+      queueService.deletePerson(personId);
+    };
+
   });
 
 
