@@ -1,6 +1,22 @@
 (function(){
 
-  var app = angular.module('queue', ['ionic']);
+  var app = angular.module('queup', ['ionic']);
+
+
+  app.config(function($stateProvider, $urlRouterProvider){
+    
+    $urlRouterProvider.otherwise('/queue');
+
+    $stateProvider.state('queue',{
+      url: '/queue',
+      templateUrl: 'templates/queue.html'
+    })
+    .state('edit',{
+      url: '/edit',
+      templateUrl: 'templates/edit.html'
+    });
+
+  });
 
   app.run(function($ionicPlatform) {
     $ionicPlatform.ready(function() {
