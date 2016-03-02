@@ -15,7 +15,6 @@ $ npm install
 Then run:
 
 ```bash
-$ ionic start 
 $ ionic serve
 ```
 
